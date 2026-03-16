@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Scanner Test</title>
+    <script src="html5-qrcode.min.js"></script>
+</head>
+<body>
+    <h2>Simple Scanner Test</h2>
+    <div id="scanner" style="width:100%; max-width:500px; height:300px; background:#ddd; border:2px solid black;"></div>
+    <script>
+        const scanner = new Html5Qrcode("scanner");
+        scanner.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: 250 },
+            (text) => alert("Scanned: " + text),
+            (error) => console.log(error)
+        ).catch(err => {
+            alert("Camera error: " + err);
+            console.error(err);
+        });
+    </script>
+</body>
+</html>
