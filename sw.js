@@ -6,8 +6,7 @@ const urlsToCache = [
     './styles.css',
     './manifest.json',
     'https://cdn.tailwindcss.com',
-    'https://unpkg.com/dexie/dist/dexie.js',
-    'https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js'
+    'https://unpkg.com/dexie/dist/dexie.js'
 ];
 
 self.addEventListener('install', event => {
