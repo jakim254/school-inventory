@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Inventory & Library</title>
+    <!-- Tailwind CSS for easy styling (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Dexie.js (IndexedDB wrapper) -->
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <!-- html5-qrcode (barcode scanner) -->
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <!-- Link to manifest for PWA -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Custom styles (optional) -->
+    <link rel="stylesheet" href="styles.css">
+    <meta name="theme-color" content="#4CAF50">
+</head>
+<body class="bg-gray-100 p-4">
+
+    <div class="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold text-center text-green-700 mb-6">📚 School Inventory</h1>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b mb-4">
+            <button id="tabItems" class="flex-1 py-2 text-center font-semibold text-green-600 border-b-2 border-green-600">Items</button>
+            <button id="tabScan" class="flex-1 py-2 text-center text-gray-500">Scan</button>
+            <button id="tabAdd" class="flex-1 py-2 text-center text-gray-500">Add Item</button>
+            <button id="tabHistory" class="flex-1 py-2 text-center text-gray-500">History</button>
+        </div>
+
+        <!-- Items List View -->
+        <div id="itemsView" class="block">
+            <input type="text" id="searchItems" placeholder="Search by name or barcode..." class="w-full p-2 border rounded mb-4">
+            <div id="itemsList" class="space-y-2"></div>
+        </div>
+
+        <!-- Scan View -->
+        <div id="scanView" class="hidden">
+            <div id="scanner" class="w-full h-64 bg-black rounded-lg overflow-hidden"></div>
+            <p class="text-center text-sm text-gray-600 mt-2">Point camera at a barcode</p>
+            <button id="stopScan" class="mt-2 bg-red-500 text-white px-4 py-2 rounded w-full">Stop Scanner</button>
+        </div>
+
+        <!-- Add/Edit Item Form -->
+        <div id="addView" class="hidden">
+            <form id="itemForm">
+                <input type="hidden" id="itemId" value="">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium">Barcode *</label>
+                    <input type="text" id="barcode" required class="w-full p-2 border rounded">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium">Name *</label>
+                    <input type="text" id="name" required class="w-full p-2 border rounded">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium">Category</label>
+                    <input type="text" id="category" class="w-full p-2 border rounded" placeholder="e.g., Book, Laptop">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium">Location</label>
+                    <input type="text" id="location" class="w-full p-2 border rounded" placeholder="e.g., Shelf A1">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium">Total Quantity</label>
+                    <input type="number" id="quantity" value="1" min="1" class="w-full p-2 border rounded">
+                </div>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded w-full">Save Item</button>
+            </form>
+        </div>
+
+        <!-- Borrow/Return & History View -->
+        <div id="historyView" class="hidden">
+            <h2 class="text-lg font-semibold mb-2">Transaction History</h2>
+            <div id="historyList" class="space-y-2 max-h-96 overflow-y-auto"></div>
+        </div>
+
+        <!-- Item Detail Modal (hidden by default) -->
+        <div id="itemModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4">
+            <div class="bg-white rounded-lg p-6 max-w-md w-full">
+                <h2 id="modalTitle" class="text-xl font-bold mb-4">Item Details</h2>
+                <div id="modalContent"></div>
+                <div class="flex space-x-2 mt-4">
+                    <button id="modalBorrow" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded">Borrow</button>
+                    <button id="modalReturn" class="flex-1 bg-green-600 text-white px-4 py-2 rounded">Return</button>
+                    <button id="modalClose" class="flex-1 bg-gray-400 text-white px-4 py-2 rounded">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
